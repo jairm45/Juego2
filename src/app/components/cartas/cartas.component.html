@@ -1,0 +1,31 @@
+<h1>MEMORY GAME</h1>
+
+<div class="game-info">
+  <div>Movimientos: <span>{{ moves }}</span></div>
+  <div>Parejas: <span>{{ matchedPairs }}</span>/8</div>
+  <div>Tiempo: <span>{{ formattedTime }}</span></div>
+</div>
+
+<div class="game-board">
+  <div
+    class="card"
+    *ngFor="let card of cards; let i = index"
+    [ngClass]="{ flipped: card.flipped, matched: card.matched }"
+    (click)="flipCard(i)"
+  >
+    <div class="card-back">?</div>
+    <div class="card-content">{{ card.symbol }}</div>
+  </div>
+</div>
+
+<button class="reset-btn" (click)="resetGame()">Nuevo Juego</button>
+
+<div class="overlay" [class.show]="showWin"></div>
+<div class="win-message" [class.show]="showWin">
+  <h2>🎉 ¡Felicidades! 🎉</h2>
+  <p>¡Has completado el juego!</p>
+  <p>Movimientos: {{ moves }}</p>
+  <p>Tiempo: {{ formattedTime }}</p>
+  <button class="reset-btn" (click)="resetGame()">Jugar de Nuevo</button>
+</div>
+
