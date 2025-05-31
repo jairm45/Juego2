@@ -11,10 +11,13 @@ export class LoginComponent {
 
   constructor(private router: Router) {}
 
-  goToRegistro() {
-    this.router.navigate(['/registro']);
+  startGame(jugadores: number) {
+    if (jugadores === 1) {
+      this.router.navigate(['/juego']);
+    } else if (jugadores === 2) {
+      this.router.navigate(['/registro']);
+    }
   }
-
 
 
 }
