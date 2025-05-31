@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface Card {
   id: number;
@@ -14,10 +15,12 @@ interface PlayerStats {
   time: number; // in seconds
 }
 
+
 @Component({
   selector: 'app-memory-game',
   templateUrl: './memory-game.component.html',
-  styleUrls: ['./memory-game.component.css']
+  styleUrls: ['./memory-game.component.css'],
+  imports: [CommonModule]
 })
 export class MemoryGameComponent implements OnInit, OnDestroy {
   cards: Card[] = [];

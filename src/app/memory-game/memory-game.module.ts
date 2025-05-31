@@ -8,6 +8,7 @@ import { MemoryGameComponent } from './memory-game.component';
     FormsModule,
      MemoryGameComponent,
      CommonModule
+     
   ],
 
 
