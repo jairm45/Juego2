@@ -1,27 +1,25 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 interface Card {
   id: number;
   symbol: string;
   flipped: boolean;
   matched: boolean;
-  matchedBy: number | null; // 1 or 2, null if unmatched
+  matchedBy: number | null; // 1 o 2, null si no está emparejado
 }
 
 interface PlayerStats {
   moves: number;
   pairs: number;
-  time: number; // in seconds
+  time: number; // en segundos
 }
-
 
 @Component({
   selector: 'app-memory-game',
   templateUrl: './memory-game.component.html',
   styleUrls: ['./memory-game.component.css'],
- 
+  standalone: true,
   imports: [CommonModule]
 })
 export class MemoryGameComponent implements OnInit, OnDestroy {
@@ -46,7 +44,6 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.resetGame();
-    this.startTimer();
   }
 
   ngOnDestroy() {
@@ -87,7 +84,7 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   }
 
   flipCard(card: Card) {
-    if (card.flipped || card.matched || this.flippedCards.length >= 2) return;
+    if (card.flipped || card.matched || this.flippedCards.length >= 2 || this.showWinMessageFlag) return;
 
     card.flipped = true;
     this.flippedCards.push(card);
@@ -99,8 +96,6 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
   processMove() {
     const [first, second] = this.flippedCards;
-
-    // Con cast para asegurar TypeScript el índice de player
     const playerKey = `player${this.currentPlayer}` as 'player1' | 'player2';
 
     this.gameStats[playerKey].moves++;
@@ -118,7 +113,6 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
       if (this.checkWin()) {
         this.endGame();
       }
-      // Player keeps turn on match
     } else {
       setTimeout(() => {
         first.flipped = false;
@@ -151,11 +145,13 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
       this.winnerText = '¡Empate!';
     }
 
-    clearInterval(this.timerInterval);
+    clearInterval(this.timerInterval); // Detener el timer inmediatamente
   }
 
   startTimer() {
     this.timerInterval = setInterval(() => {
+      if (this.showWinMessageFlag) return; // No continuar si el juego terminó
+
       this.totalGameTime++;
 
       if (this.currentPlayer === 1) {
