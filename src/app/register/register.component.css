@@ -1,76 +1,112 @@
-/* registro.component.css */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@600&display=swap');
 
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0b0c2a, #1d2b64);
-  background-image: url('/assets/fondo-espacio.png');
+  font-family: 'Playfair Display', serif;
+  background: radial-gradient(circle at 20% 80%, #ff9a9e 0%, #fecfef 100%);
+  background-image: url('/assets/fondo-espacio.png'); /* opcional */
   background-size: cover;
   background-position: center;
+  overflow-x: hidden;
+  position: relative;
 }
 
+/* Contenedor principal */
 .registro-container {
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 20px;
-  padding: 30px;
-  max-width: 600px;
-  margin: 5% auto;
   text-align: center;
-  box-shadow: 0 0 25px #9b5de5;
-  color: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  margin: 5% auto;
+  width: 90%;
+  max-width: 500px;
+  background-color: #fff0f6;
+  box-shadow: 0px 0px 25px #f78fc2;
+  color: #d63384;
+  position: relative;
 }
 
+/* Título */
 h1 {
-  font-size: 2.5em;
-  color: #d0aaff;
-  margin-bottom: 20px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
+  color: #d63384;
+  margin-bottom: 15px;
+  position: relative;
 }
 
-.jugador {
-  margin-bottom: 25px;
+/* Subtítulos */
+h2 {
+  font-size: 1.5rem;
+  color: #8e44ad;
 }
 
-.jugador h2 {
-  color: #cc99ff;
-  margin-bottom: 10px;
-}
-
+/* Inputs */
 input {
-  width: 45%;
   padding: 10px;
-  margin: 10px 5px;
-  border: none;
+  width: 80%;
+  margin: 10px auto;
   border-radius: 10px;
-  background-color: #1f1f3d;
-  color: white;
-  font-size: 1em;
+  border: 1px solid #d63384;
+  font-size: 1rem;
+  color: #8e44ad;
+  background-color: #fff0f6;
 }
 
-input::placeholder {
-  color: #aaa;
+input:focus {
+  outline: none;
+  border: 2px solid #d63384;
 }
 
-.botones {
-  margin-top: 20px;
-}
-
+/* Botones */
 button {
-  margin: 10px;
-  padding: 12px 24px;
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  padding: 15px;
   border: none;
-  border-radius: 12px;
-  font-size: 1em;
+  border-radius: 35px;
+  font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
-  background-color: #3d5afe;
+  transition: 0.3s ease;
+  font-family: 'Playfair Display', serif;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+button:nth-of-type(1) {
+  background: linear-gradient(135deg, #ff6b9d, #ff8a80);
   color: white;
-  box-shadow: 0px 0px 10px #a683f7;
-  transition: transform 0.3s ease;
+}
+
+button:nth-of-type(2) {
+  background: linear-gradient(135deg, #a8e6cf, #88d8c0);
+  color: #2d5a27;
 }
 
 button:hover {
   transform: scale(1.05);
-  opacity: 0.9;
+  opacity: 0.95;
+}
+
+/* Corazones flotantes */
+.heart {
+  position: absolute;
+  color: #ff69b4;
+  font-size: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  animation: float-heart 3s ease-out forwards;
+}
+
+@keyframes float-heart {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.5);
+  }
 }

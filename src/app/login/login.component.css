@@ -1,13 +1,16 @@
-/* Fondo general con imagen y degradado opcional */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@600&display=swap');
+
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #a2f3f3 0%, #007BFF 100%);
-  background-image: url('/assets/fondo-espacio.png'); /* Asegúrate de tener esta imagen en src/assets */
+  font-family: 'Playfair Display', serif;
+  background: radial-gradient(circle at 20% 80%, #ff9a9e 0%, #fecfef 100%);
+  background-image: url('/assets/fondo-espacio.png'); /* opcional */
   background-size: cover;
   background-position: center;
+  overflow-x: hidden;
+  position: relative;
 }
 
 /* Contenedor principal */
@@ -18,23 +21,27 @@ body, html {
   margin: 5% auto;
   width: 90%;
   max-width: 500px;
-  background-color: #013c4c; /* Azul oscuro sólido */
-  box-shadow: 0px 0px 25px #4fd1c5;
-  color: #ffffff;
+  background-color: #fff0f6;
+  box-shadow: 0px 0px 25px #f78fc2;
+  color: #d63384;
+  position: relative;
 }
 
 /* Título */
 h1 {
-  font-size: 2.8em;
-  margin-bottom: 10px;
-  color: #00ffff; /* Cian */
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
+  color: #d63384;
+  margin-bottom: 15px;
+  position: relative;
 }
 
 /* Subtítulo */
 p {
   font-size: 1.2em;
   margin-bottom: 25px;
-  color: #d1ffff;
+  color: #8e44ad;
+  font-style: italic;
 }
 
 /* Botones */
@@ -44,27 +51,68 @@ button {
   margin: 10px auto;
   padding: 15px;
   border: none;
-  border-radius: 12px;
-  font-size: 1em;
+  border-radius: 35px;
+  font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s ease;
+  font-family: 'Playfair Display', serif;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* Botón UN JUGADOR */
 button:nth-of-type(1) {
-  background-color: #00bcd4; /* azul claro */
+  background: linear-gradient(135deg, #ff6b9d, #ff8a80);
   color: white;
 }
 
-/* Botón DOS JUGADORES */
 button:nth-of-type(2) {
-  background-color: #4dd0e1; /* agua marina */
-  color: white;
+  background: linear-gradient(135deg, #a8e6cf, #88d8c0);
+  color: #2d5a27;
 }
 
-/* Hover */
 button:hover {
   transform: scale(1.05);
-  opacity: 0.9;
+  opacity: 0.95;
+}
+
+/* Corazones flotantes */
+.heart {
+  position: absolute;
+  color: #ff69b4;
+  font-size: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  animation: float-heart 3s ease-out forwards;
+}
+
+@keyframes float-heart {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.5);
+  }
+}
+
+@keyframes float-heart {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.5);
+  }
+}
+
+.heart {
+  position: absolute;
+  color: #ff69b4;
+  font-size: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  animation: float-heart 3s ease-out;
+  z-index: 9999;
 }
