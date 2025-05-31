@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 
 interface Card {
   id: number;
@@ -20,6 +21,7 @@ interface PlayerStats {
   selector: 'app-memory-game',
   templateUrl: './memory-game.component.html',
   styleUrls: ['./memory-game.component.css'],
+ 
   imports: [CommonModule]
 })
 export class MemoryGameComponent implements OnInit, OnDestroy {
