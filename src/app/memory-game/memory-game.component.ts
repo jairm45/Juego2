@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Jugador } from '../models/jugador.model';
+import { JugadorService } from '../services/jugador.service';
 
 interface Card {
   id: number;
@@ -28,6 +30,9 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   flippedCards: Card[] = [];
   currentPlayer: number = 1;
 
+  jugador1: Jugador = { nombre: '', descripcion: '' };
+  jugador2: Jugador = { nombre: '', descripcion: '' };
+
   gameStats: {
     player1: PlayerStats;
     player2: PlayerStats;
@@ -42,7 +47,11 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   winner: number | null = null;
   winnerText: string = '';
 
+  constructor(private jugadorService: JugadorService) {}
+
   ngOnInit() {
+    this.jugador1 = this.jugadorService.getJugador1();
+    this.jugador2 = this.jugadorService.getJugador2();
     this.resetGame();
   }
 
@@ -136,21 +145,21 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
     if (this.gameStats.player1.pairs > this.gameStats.player2.pairs) {
       this.winner = 1;
-      this.winnerText = '¡Jugador 1 Gana!';
+      this.winnerText = `¡${this.jugador1.nombre} gana! 🎉`;
     } else if (this.gameStats.player2.pairs > this.gameStats.player1.pairs) {
       this.winner = 2;
-      this.winnerText = '¡Jugador 2 Gana!';
+      this.winnerText = `¡${this.jugador2.nombre} gana! 🎉`;
     } else {
       this.winner = 0;
       this.winnerText = '¡Empate!';
     }
 
-    clearInterval(this.timerInterval); // Detener el timer inmediatamente
+    clearInterval(this.timerInterval);
   }
 
   startTimer() {
     this.timerInterval = setInterval(() => {
-      if (this.showWinMessageFlag) return; // No continuar si el juego terminó
+      if (this.showWinMessageFlag) return;
 
       this.totalGameTime++;
 
