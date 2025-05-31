@@ -1,0 +1,68 @@
+<h1>MEMORY GAME - 2 JUGADORES</h1>
+
+<div class="players-info">
+  <div class="player-card player1" [class.active]="currentPlayer === 1" id="player1Card">
+    <div class="player-name">Jugador 1</div>
+    <div class="player-stats">
+      <div class="stat">Movimientos: <span>{{ gameStats.player1.moves }}</span></div>
+      <div class="stat">Parejas: <span>{{ gameStats.player1.pairs }}</span></div>
+      <div class="player-time">Tiempo: <span>{{ formatTime(gameStats.player1.time) }}</span></div>
+    </div>
+  </div>
+
+  <div class="player-card player2" [class.active]="currentPlayer === 2" id="player2Card">
+    <div class="player-name">Jugador 2</div>
+    <div class="player-stats">
+      <div class="stat">Movimientos: <span>{{ gameStats.player2.moves }}</span></div>
+      <div class="stat">Parejas: <span>{{ gameStats.player2.pairs }}</span></div>
+      <div class="player-time">Tiempo: <span>{{ formatTime(gameStats.player2.time) }}</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="game-time">Tiempo: <span>{{ formatTime(totalGameTime) }}</span></div>
+<div class="current-turn" [style.color]="currentPlayer === 1 ? '#FF6B6B' : '#4ECDC4'">
+  Turno del Jugador {{ currentPlayer }}
+</div>
+
+<div class="game-board" id="gameBoard">
+  <div
+    class="card"
+    *ngFor="let card of cards; let i = index"
+    [class.flipped]="card.flipped"
+    [class.matched-player1]="card.matchedBy === 1"
+    [class.matched-player2]="card.matchedBy === 2"
+    (click)="flipCard(card)"
+  >
+    <div class="card-back">?</div>
+    <div class="card-content">{{ card.symbol }}</div>
+  </div>
+</div>
+
+<button class="reset-btn" (click)="resetGame()">Nuevo Juego</button>
+
+<div class="overlay" [class.show]="showWinMessageFlag"></div>
+<div class="win-message" [class.show]="showWinMessageFlag">
+  <div class="winner-text" [class.winner-player1]="winner === 1" [class.winner-player2]="winner === 2">
+  {{ winnerText }}
+</div>
+  <div class="final-scores">
+    <h3>Resultados Finales:</h3>
+    <div style="display: flex; justify-content: space-between; margin: 15px 0;">
+      <div style="text-align: center;">
+        <h4 style="color: #FF6B6B;">Jugador 1</h4>
+        <p>Parejas: {{ gameStats.player1.pairs }}</p>
+        <p>Movimientos: {{ gameStats.player1.moves }}</p>
+        <p>Tiempo: {{ formatTime(gameStats.player1.time) }}</p>
+      </div>
+      <div style="text-align: center;">
+        <h4 style="color: #4ECDC4;">Jugador 2</h4>
+        <p>Parejas: {{ gameStats.player2.pairs }}</p>
+        <p>Movimientos: {{ gameStats.player2.moves }}</p>
+        <p>Tiempo: {{ formatTime(gameStats.player2.time) }}</p>
+      </div>
+    </div>
+    <p><strong>Tiempo total del juego: {{ formatTime(totalGameTime) }}</strong></p>
+  </div>
+  <button class="reset-btn" (click)="resetGame()">Jugar de Nuevo</button>
+</div>

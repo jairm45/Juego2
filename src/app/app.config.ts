@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 
@@ -11,6 +12,6 @@ import { FormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
 
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), FormsModule],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), FormsModule, CommonModule],
 
 };
