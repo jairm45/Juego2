@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -7,14 +8,13 @@ import { Component } from '@angular/core';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-    startGame(players: number) {
-    console.log(`${players} jugador(es) ha(n) sido seleccionado(s).`);
-    // Aquí puedes navegar a la pantalla del juego
+
+  constructor(private router: Router) {}
+
+  goToRegistro() {
+    this.router.navigate(['/registro']);
   }
 
-  deletePlayers() {
-    console.log("Jugadores eliminados.");
-    // Lógica para borrar jugadores o reiniciar
-  }
+
 
 }

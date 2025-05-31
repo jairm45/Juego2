@@ -1,0 +1,76 @@
+/* registro.component.css */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0b0c2a, #1d2b64);
+  background-image: url('/assets/fondo-espacio.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.registro-container {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 5% auto;
+  text-align: center;
+  box-shadow: 0 0 25px #9b5de5;
+  color: #ffffff;
+}
+
+h1 {
+  font-size: 2.5em;
+  color: #d0aaff;
+  margin-bottom: 20px;
+}
+
+.jugador {
+  margin-bottom: 25px;
+}
+
+.jugador h2 {
+  color: #cc99ff;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 45%;
+  padding: 10px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 10px;
+  background-color: #1f1f3d;
+  color: white;
+  font-size: 1em;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+.botones {
+  margin-top: 20px;
+}
+
+button {
+  margin: 10px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #3d5afe;
+  color: white;
+  box-shadow: 0px 0px 10px #a683f7;
+  transition: transform 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
