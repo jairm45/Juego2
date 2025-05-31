@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  jugador1 = { nombre: '', edad: null };
-  jugador2 = { nombre: '', edad: null };
+  jugador1 = { nombre: '', descripcion: null };
+  jugador2 = { nombre: '', descripcion: null };
 
   constructor(private router: Router) {}
 
