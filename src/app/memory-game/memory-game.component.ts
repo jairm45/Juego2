@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Jugador } from '../models/jugador.model';
 import { JugadorService } from '../services/jugador.service';
+import { JuegosService } from '../services/juegos.service';
+import { HttpClientModule } from '@angular/common/http';
 
 interface Card {
   id: number;
@@ -22,7 +24,7 @@ interface PlayerStats {
   templateUrl: './memory-game.component.html',
   styleUrls: ['./memory-game.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, HttpClientModule]
 })
 export class MemoryGameComponent implements OnInit, OnDestroy {
   cards: Card[] = [];
@@ -47,9 +49,12 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   winner: number | null = null;
   winnerText: string = '';
 
-  constructor(private jugadorService: JugadorService) {}
+  juegoListObject?: any = [];
+
+  constructor(private jugadorService: JugadorService, private juegosService: JuegosService) {}
 
   ngOnInit() {
+    this.juegosService.getJuegos().subscribe(data => this.juegoListObject = data);
     this.jugador1 = this.jugadorService.getJugador1();
     this.jugador2 = this.jugadorService.getJugador2();
     this.resetGame();
