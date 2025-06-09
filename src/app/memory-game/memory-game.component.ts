@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Partida } from '../models/partida.model';
 import { Usuario } from '../models/usuario.model';
+import { AciertosService } from '../services/aciertos.service';
 import { JuegosService } from '../services/juegos.service';
 import { PartidaService } from '../services/partida.service';
 
@@ -45,7 +46,8 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
   constructor(
     private juegosService: JuegosService,
-    private partidaService: PartidaService
+    private partidaService: PartidaService,
+    private aciertosService: AciertosService
   ) {}
 
   ngOnInit() {
@@ -90,6 +92,8 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
     clearInterval(this.timerInterval);
     this.startTimer();
+
+
   }
 
   shuffleCards(array: string[]): string[] {
@@ -178,7 +182,35 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     };
 
     this.partidaService.GetCrearPartida(partida).subscribe({
-      next: (res) => console.log('✅ Partida guardada:', res),
+      next: (res: any) => {
+        console.log('✅ Partida guardada:', res);
+
+        const partidaId = res.id;
+
+        const aciertosJugador1 = {
+          partidaid: partidaId,
+          usuarioid: this.jugador1.id,
+          aciertos: this.gameStats.player1.pairs,
+          tiempo: this.formatTime(this.gameStats.player1.time)
+        };
+
+        const aciertosJugador2 = {
+          partidaid: partidaId,
+          usuarioid: this.jugador2.id,
+          aciertos: this.gameStats.player2.pairs,
+          tiempo: this.formatTime(this.gameStats.player2.time)
+        };
+
+        this.aciertosService.GetCrearAciertos(aciertosJugador1).subscribe({
+          next: () => console.log('✅ Aciertos jugador 1 guardados'),
+          error: err => console.error('❌ Error guardar aciertos jugador 1', err)
+        });
+
+        this.aciertosService.GetCrearAciertos(aciertosJugador2).subscribe({
+          next: () => console.log('✅ Aciertos jugador 2 guardados'),
+          error: err => console.error('❌ Error guardar aciertos jugador 2', err)
+        });
+      },
       error: (err) => console.error('❌ Error al guardar partida:', err)
     });
   }
