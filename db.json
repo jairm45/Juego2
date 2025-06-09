@@ -76,6 +76,26 @@
       "juego": "1",
       "Aciertosjugador1": 4,
       "Aciertosjugador2": 4
+    },
+    {
+      "id": 0,
+      "jugador1": "2607",
+      "jugador2": "c252",
+      "tiempo": "0:42",
+      "ganador": 1,
+      "juego": "2",
+      "Aciertosjugador1": 6,
+      "Aciertosjugador2": 2
+    },
+    {
+      "id": 0,
+      "jugador1": 2,
+      "jugador2": 1,
+      "tiempo": "1:06",
+      "ganador": 1,
+      "juego": 2,
+      "Aciertosjugador1": 6,
+      "Aciertosjugador2": 2
     }
   ],
   "aciertos": [
@@ -106,6 +126,34 @@
       "usuarioid": "c252",
       "aciertos": 4,
       "tiempo": "0:31"
+    },
+    {
+      "id": "5b5b",
+      "partidaid": 0,
+      "usuarioid": "2607",
+      "aciertos": 6,
+      "tiempo": "0:29"
+    },
+    {
+      "id": "70d2",
+      "partidaid": 0,
+      "usuarioid": "c252",
+      "aciertos": 2,
+      "tiempo": "0:13"
+    },
+    {
+      "id": "3f5a",
+      "partidaid": 0,
+      "usuarioid": 2,
+      "aciertos": 6,
+      "tiempo": "0:39"
+    },
+    {
+      "id": "2be4",
+      "partidaid": 0,
+      "usuarioid": 1,
+      "aciertos": 2,
+      "tiempo": "0:27"
     }
   ]
 }

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Partida } from '../models/partida.model';
 import { Usuario } from '../models/usuario.model';
 import { AciertosService } from '../services/aciertos.service';
@@ -47,7 +48,8 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   constructor(
     private juegosService: JuegosService,
     private partidaService: PartidaService,
-    private aciertosService: AciertosService
+    private aciertosService: AciertosService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -64,6 +66,10 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     }
 
     this.resetGame();
+  }
+
+  volverInicio(){
+    this.router.navigate(['/']);
   }
 
   ngOnDestroy() {
