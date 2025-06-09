@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Jugador } from '../models/jugador.model';
-import { JugadorService } from '../services/jugador.service';
-import { JuegosService } from '../services/juegos.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Usuario } from '../models/usuario.model';
+import { JuegosService } from '../services/juegos.service';
 
 interface Card {
   id: number;
@@ -32,13 +31,10 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   flippedCards: Card[] = [];
   currentPlayer: number = 1;
 
-  jugador1: Jugador = { nombre: '', descripcion: '' };
-  jugador2: Jugador = { nombre: '', descripcion: '' };
+  jugador1: Usuario = { id: 0, username: '', password: '', email: '', idjuego: 0 };
+  jugador2: Usuario = { id: 0, username: '', password: '', email: '', idjuego: 0 };
 
-  gameStats: {
-    player1: PlayerStats;
-    player2: PlayerStats;
-  } = {
+  gameStats = {
     player1: { moves: 0, pairs: 0, time: 0 },
     player2: { moves: 0, pairs: 0, time: 0 }
   };
@@ -51,12 +47,21 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
   juegoListObject?: any = [];
 
-  constructor(private jugadorService: JugadorService, private juegosService: JuegosService) {}
+  constructor(private juegosService: JuegosService) {}
 
   ngOnInit() {
     this.juegosService.getJuegos().subscribe(data => this.juegoListObject = data);
-    this.jugador1 = this.jugadorService.getJugador1();
-    this.jugador2 = this.jugadorService.getJugador2();
+
+    const jugador1Data = localStorage.getItem('jugador1');
+    const jugador2Data = localStorage.getItem('jugador2');
+
+    if (jugador1Data && jugador2Data) {
+      this.jugador1 = JSON.parse(jugador1Data);
+      this.jugador2 = JSON.parse(jugador2Data);
+    } else {
+      console.error('Jugadores no encontrados. Redirige al registro si es necesario.');
+    }
+
     this.resetGame();
   }
 
@@ -150,10 +155,10 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
     if (this.gameStats.player1.pairs > this.gameStats.player2.pairs) {
       this.winner = 1;
-      this.winnerText = `¡${this.jugador1.nombre} gana! 🎉`;
+      this.winnerText = `¡${this.jugador1.username} gana! 🎉`;
     } else if (this.gameStats.player2.pairs > this.gameStats.player1.pairs) {
       this.winner = 2;
-      this.winnerText = `¡${this.jugador2.nombre} gana! 🎉`;
+      this.winnerText = `¡${this.jugador2.username} gana! 🎉`;
     } else {
       this.winner = 0;
       this.winnerText = '¡Empate!';

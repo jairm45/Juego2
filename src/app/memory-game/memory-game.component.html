@@ -2,7 +2,7 @@
 
 <div class="players-info">
   <div class="player-card player1" [class.active]="currentPlayer === 1" id="player1Card">
-    <div class="player-name">{{ jugador1.nombre }}</div>
+    <div class="player-name">{{ jugador1.username }}</div>
     <div class="player-stats">
       <div class="stat">Movimientos: <span>{{ gameStats.player1.moves }}</span></div>
       <div class="stat">Parejas: <span>{{ gameStats.player1.pairs }}</span></div>
@@ -11,7 +11,7 @@
   </div>
 
   <div class="player-card player2" [class.active]="currentPlayer === 2" id="player2Card">
-    <div class="player-name">{{ jugador2.nombre }}</div>
+    <div class="player-name">{{ jugador2.username }}</div>
     <div class="player-stats">
       <div class="stat">Movimientos: <span>{{ gameStats.player2.moves }}</span></div>
       <div class="stat">Parejas: <span>{{ gameStats.player2.pairs }}</span></div>
@@ -22,7 +22,7 @@
 
 <div class="game-time">Tiempo: <span>{{ formatTime(totalGameTime) }}</span></div>
 <div class="current-turn" [style.color]="currentPlayer === 1 ? '#FF6B6B' : '#4ECDC4'">
-  Turno de {{ currentPlayer === 1 ? jugador1.nombre : jugador2.nombre }}
+  Turno de {{ currentPlayer === 1 ? jugador1.username : jugador2.username }}
 </div>
 
 <div class="game-board" id="gameBoard">
@@ -50,13 +50,13 @@
     <h3>Resultados Finales:</h3>
     <div style="display: flex; justify-content: space-between; margin: 15px 0;">
       <div style="text-align: center;">
-        <h4 style="color: #FF6B6B;">{{ jugador1.nombre }}</h4>
+        <h4 style="color: #FF6B6B;">{{ jugador1.username }}</h4>
         <p>Parejas: {{ gameStats.player1.pairs }}</p>
         <p>Movimientos: {{ gameStats.player1.moves }}</p>
         <p>Tiempo: {{ formatTime(gameStats.player1.time) }}</p>
       </div>
       <div style="text-align: center;">
-        <h4 style="color: #4ECDC4;">{{ jugador2.nombre }}</h4>
+        <h4 style="color: #4ECDC4;">{{ jugador2.username }}</h4>
         <p>Parejas: {{ gameStats.player2.pairs }}</p>
         <p>Movimientos: {{ gameStats.player2.moves }}</p>
         <p>Tiempo: {{ formatTime(gameStats.player2.time) }}</p>

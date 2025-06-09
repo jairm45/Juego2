@@ -1,21 +1,26 @@
-<!-- registro.component.html -->
 <div class="registro-container">
   <h1>REGISTRO DE JUGADORES</h1>
 
   <div class="jugador">
-    <h2> JUGADOR 1</h2>
-    <input type="text" placeholder="Nombre" [(ngModel)]="jugador1.nombre">
-    <input type="text" placeholder="descripcion" [(ngModel)]="jugador1.descripcion">
+    <h2>JUGADOR 1</h2>
+    <select [(ngModel)]="jugador1" name="jugador1Select">
+      <option *ngFor="let user of usuarios" [ngValue]="user">
+        {{ user.username }}
+      </option>
+    </select>
   </div>
 
   <div class="jugador">
-    <h2> JUGADOR 2</h2>
-    <input type="text" placeholder="Nombre" [(ngModel)]="jugador2.nombre">
-    <input type="text" placeholder="descripcion" [(ngModel)]="jugador2.descripcion">
+    <h2>JUGADOR 2</h2>
+    <select [(ngModel)]="jugador2" name="jugador2Select">
+      <option *ngFor="let user of usuarios" [ngValue]="user">
+        {{ user.username }}
+      </option>
+    </select>
   </div>
 
   <div class="botones">
-    <button (click)="jugar()"> JUGAR</button>
-    <button (click)="volver()"> VOLVER</button>
+    <button (click)="jugar()">JUGAR</button>
+    <button (click)="volver()">VOLVER</button>
   </div>
 </div>

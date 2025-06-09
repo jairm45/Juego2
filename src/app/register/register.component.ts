@@ -1,26 +1,45 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Jugador } from '../models/jugador.model';
-import { JugadorService } from '../services/jugador.service';
+import { Usuario } from '../models/usuario.model';
+import { UsuariosService } from '../services/usuarios.service';
+
 @Component({
   selector: 'app-register',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
- jugador1: Jugador = { nombre: '', descripcion: '' };
-  jugador2: Jugador = { nombre: '', descripcion: '' };
+export class RegisterComponent implements OnInit {
+  usuarios: Usuario[] = [];
+  jugador1!: Usuario;
+  jugador2!: Usuario;
 
-  constructor(private router: Router, private jugadorService: JugadorService) {}
+  constructor(private router: Router, private usuariosService: UsuariosService) {}
+
+  ngOnInit() {
+    this.cargarUsuarios();
+  }
+
+  cargarUsuarios() {
+    this.usuariosService.getUsuarios().subscribe({
+      next: (data: any) => {
+        this.usuarios = data as Usuario[];
+        console.log('Usuarios cargados:', this.usuarios);
+      },
+      error: (err) => {
+        console.error('Error al obtener usuarios:', err);
+      }
+    });
+  }
 
   jugar() {
-    // Guardar los jugadores en el service
-    this.jugadorService.setJugadores(this.jugador1, this.jugador2);
-
-    // Redirigir al juego de memoria
-    this.router.navigate(['/juego']); // Asegúrate de que '/juego' sea la ruta correcta
+    // Puedes guardar los jugadores en localStorage o pasarlos a otro service
+    localStorage.setItem('jugador1', JSON.stringify(this.jugador1));
+    localStorage.setItem('jugador2', JSON.stringify(this.jugador2));
+    this.router.navigate(['/juego']);
   }
 
   volver() {
