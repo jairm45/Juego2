@@ -37,20 +37,6 @@
       "password": "123456",
       "email": "angela@gmail.com",
       "idjuego": "1"
-    },
-    {
-      "id": "d79b",
-      "username": "kelly",
-      "password": "12345678",
-      "email": "kelly@gmail.com",
-      "idjuego": "2"
-    },
-    {
-      "id": "01fa",
-      "username": "helen",
-      "password": "helen123",
-      "email": "helen@hotmail.com",
-      "idjuego": "2"
     }
   ]
 }
