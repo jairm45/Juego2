@@ -15,7 +15,7 @@ export class LoginComponent {
 
     setTimeout(() => {
       if (jugadores === 1) {
-        this.router.navigate(['/juego']);
+        this.router.navigate(['/registrousuario']);
       } else if (jugadores === 2) {
         this.router.navigate(['/registro']);
       }
