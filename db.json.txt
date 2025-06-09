@@ -1,6 +1,0 @@
-{
-  "juegos": [
-    { "id": 1, "nombre": "Memorama Clásico" },
-    { "id": 2, "nombre": "Memorama Galáctico" }
-  ]
-}
