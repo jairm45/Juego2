@@ -38,5 +38,17 @@
       "email": "angela@gmail.com",
       "idjuego": "1"
     }
+  ],
+  "partidas": [
+    {
+      "id": 0,
+      "jugador1": "c252",
+      "jugador2": "eaaa",
+      "tiempo": "1:25",
+      "ganador": 0,
+      "juego": "1",
+      "Aciertosjugador1": 4,
+      "Aciertosjugador2": 4
+    }
   ]
 }

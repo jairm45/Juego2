@@ -1,21 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Partida } from '../models/partida.model';
 import { Usuario } from '../models/usuario.model';
 import { JuegosService } from '../services/juegos.service';
+import { PartidaService } from '../services/partida.service';
 
 interface Card {
   id: number;
   symbol: string;
   flipped: boolean;
   matched: boolean;
-  matchedBy: number | null; // 1 o 2, null si no está emparejado
-}
-
-interface PlayerStats {
-  moves: number;
-  pairs: number;
-  time: number; // en segundos
+  matchedBy: number | null;
 }
 
 @Component({
@@ -47,7 +43,10 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
   juegoListObject?: any = [];
 
-  constructor(private juegosService: JuegosService) {}
+  constructor(
+    private juegosService: JuegosService,
+    private partidaService: PartidaService
+  ) {}
 
   ngOnInit() {
     this.juegosService.getJuegos().subscribe(data => this.juegoListObject = data);
@@ -153,11 +152,12 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   endGame() {
     this.showWinMessageFlag = true;
 
+    let ganador = 0;
     if (this.gameStats.player1.pairs > this.gameStats.player2.pairs) {
-      this.winner = 1;
+      this.winner = ganador = 1;
       this.winnerText = `¡${this.jugador1.username} gana! 🎉`;
     } else if (this.gameStats.player2.pairs > this.gameStats.player1.pairs) {
-      this.winner = 2;
+      this.winner = ganador = 2;
       this.winnerText = `¡${this.jugador2.username} gana! 🎉`;
     } else {
       this.winner = 0;
@@ -165,6 +165,22 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     }
 
     clearInterval(this.timerInterval);
+
+    const partida: Partida = {
+      id: 0, // El backend lo genera
+      jugador1: this.jugador1.id,
+      jugador2: this.jugador2.id,
+      tiempo: this.formatTime(this.totalGameTime),
+      ganador: ganador,
+      juego: this.jugador1.idjuego, // Asumimos que ambos jugadores tienen el mismo juego
+      Aciertosjugador1: this.gameStats.player1.pairs,
+      Aciertosjugador2: this.gameStats.player2.pairs
+    };
+
+    this.partidaService.GetCrearPartida(partida).subscribe({
+      next: (res) => console.log('✅ Partida guardada:', res),
+      error: (err) => console.error('❌ Error al guardar partida:', err)
+    });
   }
 
   startTimer() {
