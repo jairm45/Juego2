@@ -1,9 +1,56 @@
 {
-
   "juegos": [
-    { "id": 1, "nombre": "Memorama Clásico" },
-    { "id": 2, "nombre": "Memorama Galáctico" }
+    {
+      "id": 1,
+      "nombre": "Memorama Clásico"
+    },
+    {
+      "id": 2,
+      "nombre": "Memorama Galáctico"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "username": "jugador1",
+      "password": "jugador1",
+      "email": "jugador1",
+      "idjuego": 1
+    },
+    {
+      "id": 2,
+      "username": "jugador2",
+      "password": "jugador2",
+      "email": "jugador2",
+      "idjuego": 2
+    },
+    {
+      "id": "eaaa",
+      "username": "juan",
+      "password": "1234",
+      "email": "juancarlos@gmail.com",
+      "idjuego": "1"
+    },
+    {
+      "id": "c252",
+      "username": "anyela",
+      "password": "123456",
+      "email": "angela@gmail.com",
+      "idjuego": "1"
+    },
+    {
+      "id": "d79b",
+      "username": "kelly",
+      "password": "12345678",
+      "email": "kelly@gmail.com",
+      "idjuego": "2"
+    },
+    {
+      "id": "01fa",
+      "username": "helen",
+      "password": "helen123",
+      "email": "helen@hotmail.com",
+      "idjuego": "2"
+    }
   ]
-
-
 }

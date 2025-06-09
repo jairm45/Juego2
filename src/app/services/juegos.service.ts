@@ -18,4 +18,6 @@ export class JuegosService {
   getJuego(id: number): Observable<any>{
     return this.http.get(`${this.juegosURL}/${id}`);
   }
+
+
 }

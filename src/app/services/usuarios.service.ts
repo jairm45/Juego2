@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,5 +18,11 @@ export class UsuariosService {
    getUsuario(id: number): Observable<any>{
      return this.http.get(`${this.usuariosURL}/${id}`);
    }
+
+   crearUsuario(usuario: any): Observable<any> {
+  return this.http.post(this.usuariosURL, usuario);
+}
+
+
 
 }
