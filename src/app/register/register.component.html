@@ -5,7 +5,7 @@
     <h2>JUGADOR 1</h2>
     <select [(ngModel)]="jugador1" name="jugador1Select">
       <option *ngFor="let user of usuarios" [ngValue]="user">
-        {{ user.username }}
+        {{ user.name }}
       </option>
     </select>
   </div>
@@ -14,7 +14,7 @@
     <h2>JUGADOR 2</h2>
     <select [(ngModel)]="jugador2" name="jugador2Select">
       <option *ngFor="let user of usuarios" [ngValue]="user">
-        {{ user.username }}
+        {{ user.name }}
       </option>
     </select>
   </div>

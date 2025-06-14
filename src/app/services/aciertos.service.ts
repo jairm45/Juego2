@@ -1,26 +1,51 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Aciertos } from '../models/aciertos.model'; // Asegúrate de que este modelo esté actualizado
 
 @Injectable({
   providedIn: 'root'
 })
 export class AciertosService {
+  private apiUrl = 'https://apigame.gonzaloandreslucio.com/api/aciertos';
 
-  aciertosURL = 'http://localhost:3000/aciertos'
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  getAciertos(): Observable<any> {
-    return this.http.get(this.aciertosURL);
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
   }
 
-  GetAciertos(id: number): Observable<any> {
-    return this.http.get(`${this.aciertosURL}/${id}`);
+  getAciertos(): Observable<Aciertos[]> {
+    return this.http.get<Aciertos[]>(this.apiUrl, {
+      headers: this.getHeaders(),
+    });
   }
 
-  GetCrearAciertos(aciertos: any): Observable<any> {
-    return this.http.post(this.aciertosURL, aciertos);
+  getAciertoById(id: number): Observable<Aciertos> {
+    return this.http.get<Aciertos>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 
+  /**
+   * Crea un nuevo registro de acierto, incluyendo el campo 'tiempo'.
+   * @param acierto Objeto Aciertos (sin 'id') del frontend.
+   * @returns Observable con la respuesta del backend.
+   */
+  createAcierto(acierto: Omit<Aciertos, 'id'>): Observable<Aciertos> {
+    const backendPayload = {
+      partida_id: acierto.partida_id,
+      user_id: acierto.user_id,
+      aciertos: acierto.aciertos,
+      tiempo: acierto.tiempo, // <--- ¡CORREGIDO! Incluir el campo 'tiempo'
+    };
+
+    console.log('Payload de Aciertos enviado:', backendPayload);
+
+    return this.http.post<Aciertos>(this.apiUrl, backendPayload, {
+      headers: this.getHeaders(),
+    });
+  }
 }

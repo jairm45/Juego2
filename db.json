@@ -1,24 +1,24 @@
 {
   "juegos": [
     {
-      "id": 1,
+      "id": "1",
       "nombre": "Memorama Clásico"
     },
     {
-      "id": 2,
+      "id": "2",
       "nombre": "Memorama Galáctico"
     }
   ],
   "usuarios": [
     {
-      "id": 1,
+      "id": "1",
       "username": "jugador1",
       "password": "jugador1",
       "email": "jugador1",
       "idjuego": 1
     },
     {
-      "id": 2,
+      "id": "2",
       "username": "jugador2",
       "password": "jugador2",
       "email": "jugador2",
@@ -44,11 +44,32 @@
       "password": "12345helen",
       "email": "helen@hotmail.com",
       "idjuego": "2"
+    },
+    {
+      "id": "1037",
+      "username": "messi",
+      "password": "messi123",
+      "email": "fcbarcelona@gmail.com",
+      "idjuego": "1"
+    },
+    {
+      "id": "8770",
+      "username": "ronaldo",
+      "password": "14554",
+      "email": "ronaldo@gmail.com12",
+      "idjuego": "1"
+    },
+    {
+      "id": "8718",
+      "username": "lucio",
+      "password": "12345678",
+      "email": "lucio@gmaiil.com",
+      "idjuego": "1"
     }
   ],
   "partidas": [
     {
-      "id": 0,
+      "id": "0",
       "jugador1": "c252",
       "jugador2": "eaaa",
       "tiempo": "1:25",
@@ -58,7 +79,7 @@
       "Aciertosjugador2": 4
     },
     {
-      "id": 0,
+      "id": "0",
       "jugador1": "2607",
       "jugador2": "c252",
       "tiempo": "0:50",
@@ -68,7 +89,7 @@
       "Aciertosjugador2": 4
     },
     {
-      "id": 0,
+      "id": "0",
       "jugador1": "eaaa",
       "jugador2": "c252",
       "tiempo": "1:03",
@@ -78,7 +99,7 @@
       "Aciertosjugador2": 4
     },
     {
-      "id": 0,
+      "id": "0",
       "jugador1": "2607",
       "jugador2": "c252",
       "tiempo": "0:42",
@@ -88,7 +109,7 @@
       "Aciertosjugador2": 2
     },
     {
-      "id": 0,
+      "id": "0",
       "jugador1": 2,
       "jugador2": 1,
       "tiempo": "1:06",
@@ -96,6 +117,36 @@
       "juego": 2,
       "Aciertosjugador1": 6,
       "Aciertosjugador2": 2
+    },
+    {
+      "id": "0",
+      "jugador1": "1037",
+      "jugador2": "eaaa",
+      "tiempo": "1:02",
+      "ganador": 2,
+      "juego": "1",
+      "Aciertosjugador1": 2,
+      "Aciertosjugador2": 6
+    },
+    {
+      "id": "0",
+      "jugador1": "8770",
+      "jugador2": "1037",
+      "tiempo": "1:24",
+      "ganador": 2,
+      "juego": "1",
+      "Aciertosjugador1": 3,
+      "Aciertosjugador2": 5
+    },
+    {
+      "id": 0,
+      "jugador1": "2",
+      "jugador2": "1",
+      "tiempo": "1:00",
+      "ganador": 1,
+      "juego": 2,
+      "Aciertosjugador1": 5,
+      "Aciertosjugador2": 3
     }
   ],
   "aciertos": [
@@ -154,6 +205,48 @@
       "usuarioid": 1,
       "aciertos": 2,
       "tiempo": "0:27"
+    },
+    {
+      "id": "640f",
+      "partidaid": 0,
+      "usuarioid": "1037",
+      "aciertos": 2,
+      "tiempo": "0:27"
+    },
+    {
+      "id": "8f16",
+      "partidaid": 0,
+      "usuarioid": "eaaa",
+      "aciertos": 6,
+      "tiempo": "0:35"
+    },
+    {
+      "id": "7957",
+      "partidaid": 0,
+      "usuarioid": "8770",
+      "aciertos": 3,
+      "tiempo": "0:34"
+    },
+    {
+      "id": "7fbb",
+      "partidaid": 0,
+      "usuarioid": "1037",
+      "aciertos": 5,
+      "tiempo": "0:50"
+    },
+    {
+      "id": "b08f",
+      "partidaid": 0,
+      "usuarioid": "2",
+      "aciertos": 5,
+      "tiempo": "0:37"
+    },
+    {
+      "id": "cb1d",
+      "partidaid": 0,
+      "usuarioid": "1",
+      "aciertos": 3,
+      "tiempo": "0:23"
     }
   ]
 }

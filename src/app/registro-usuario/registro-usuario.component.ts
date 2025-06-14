@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { JuegosService } from '../services/juegos.service'; // ✅ Importa JuegosService
+import { Usuario } from '../models/usuario.model'; // Asegúrate de que este modelo esté actualizado
 import { UsuariosService } from '../services/usuarios.service';
 
 @Component({
@@ -13,61 +13,78 @@ import { UsuariosService } from '../services/usuarios.service';
   styleUrls: ['./registro-usuario.component.css']
 })
 export class RegistroUsuarioComponent implements OnInit {
+  // Eliminada la constante 'juego_id' como string, ya que la API espera un número entero (juego_id: number)
 
-  usuario = {
-    username: '',
-    password: '',
+  // ACTUALIZADO: Inicialización con la estructura de Usuario corregida
+  usuario: Usuario = {
+    id: '', // El ID se generará al registrar si el backend lo permite, o se usará crypto.randomUUID()
+    name: '', // CAMBIADO: Antes 'username'
     email: '',
-    idjuego: null
+    password: '',
+    password_confirmation: '', // CAMBIADO: Antes 'password_confirm'
+    juego_id: '' // CAMBIADO CRÍTICO: Debe ser un número entero. Asigna un ID de juego válido si es conocido.
   };
-
-  usuariosList: any[] = [];
-  juegosList: any[] = []; // ✅ Lista de juegos
 
   constructor(
     private usuariosService: UsuariosService,
-    private juegosService: JuegosService // ✅ Inyección del servicio
-    , private router: Router
+    private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.usuariosService.getUsuarios().subscribe({
-      next: (data: any) => {
-        this.usuariosList = data;
-      },
-      error: (err) => {
-        console.error('Error al cargar usuarios:', err);
-      }
-    });
+  ngOnInit(): void {}
 
-    this.juegosService.getJuegos().subscribe({
-      next: (data: any) => {
-        this.juegosList = data;
-      },
-      error: (err) => {
-        console.error('Error al cargar juegos:', err);
-      }
-    });
-  }
-
+  /**
+   * Maneja el registro de un nuevo usuario.
+   * Valida los campos y envía los datos al backend.
+   * Reemplaza 'alert()' con 'console.error' o lógica de UI de mensaje.
+   */
   registrarUsuario(): void {
-    const { username, email, password, idjuego } = this.usuario;
+    // ACTUALIZADO: Desestructuración de los campos del usuario con los nombres correctos
+    const { name, email, password, password_confirmation } = this.usuario;
 
-    if (username && email && password && idjuego !== null) {
-      this.usuariosService.crearUsuario(this.usuario).subscribe({
-        next: (res: any) => {
+    if (name && email && password && password_confirmation) {
+      if (password !== password_confirmation) {
+        console.error('Las contraseñas no coinciden'); // Reemplazado alert()
+        // Aquí podrías actualizar una propiedad para mostrar un mensaje de error en el HTML
+        return;
+      }
+
+      // Prepara el objeto para enviar al servicio.
+      // El ID no se incluye en el POST si el backend lo genera (según tu OpenAPI).
+      // Los nombres de los campos coinciden con la OpenAPI.
+      const nuevoUsuarioParaBackend: Omit<Usuario, 'id'> = {
+        name: this.usuario.name,
+        email: this.usuario.email,
+        password: this.usuario.password,
+        password_confirmation: this.usuario.password_confirmation,
+        juego_id: this.usuario.juego_id // Asegúrate de que este sea un número entero válido (Ej: 1, 2, 3...)
+      };
+
+      this.usuariosService.crearUsuario(nuevoUsuarioParaBackend).subscribe({
+        next: (res) => {
           console.log('Usuario registrado:', res);
-          alert('¡Usuario registrado con éxito!');
-          this.usuario = { username: '', password: '', email: '', idjuego: null };
+          console.log('¡Usuario registrado con éxito!'); // Reemplazado alert()
+          // Aquí podrías mostrar un mensaje de éxito al usuario en el HTML
+
+          // Reinicia el formulario a su estado inicial
+          this.usuario = {
+            id: '',
+            name: '',
+            email: '',
+            password: '',
+            password_confirmation: '',
+            juego_id: '' // Restablece a 0 o al valor predeterminado del juego
+          };
+          this.router.navigate(['/']); // Redirige después de un registro exitoso
         },
-        error: (err: any) => {
+        error: (err) => {
           console.error('Error al registrar usuario:', err);
-          alert('Ocurrió un error al registrar el usuario.');
+          console.error('Ocurrió un error al registrar el usuario. Por favor, intente de nuevo.'); // Reemplazado alert()
+          // Aquí podrías mostrar un mensaje de error detallado al usuario en el HTML
         }
       });
     } else {
-      alert('Por favor completa todos los campos.');
+      console.error('Por favor completa todos los campos.'); // Reemplazado alert()
+      // Aquí podrías mostrar un mensaje de error al usuario sobre campos faltantes
     }
-     this.router.navigate(['/']);
   }
 }

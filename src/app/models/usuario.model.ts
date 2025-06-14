@@ -1,8 +1,8 @@
-
 export interface Usuario {
-  id: number;
-  username: string;
-  password: string;
+  id: string;
+  name: string;
   email: string;
-  idjuego: number;
+  password: string;
+  password_confirmation: string;
+  juego_id: string; // <--- DEBE SER STRING
 }

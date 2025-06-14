@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Partida } from '../models/partida.model';
-import { Usuario } from '../models/usuario.model';
+import { Partida } from '../models/partida.model'; // Asegúrate de que este modelo esté actualizado
+import { Usuario } from '../models/usuario.model'; // Asegúrate de que este modelo esté actualizado
 import { AciertosService } from '../services/aciertos.service';
 import { JuegosService } from '../services/juegos.service';
 import { PartidaService } from '../services/partida.service';
@@ -29,8 +29,8 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   flippedCards: Card[] = [];
   currentPlayer: number = 1;
 
-  jugador1: Usuario = { id: 0, username: '', password: '', email: '', idjuego: 0 };
-  jugador2: Usuario = { id: 0, username: '', password: '', email: '', idjuego: 0 };
+  jugador1: Usuario = { id: '', name: '', email: '', password: '', password_confirmation: '', juego_id: '' };
+  jugador2: Usuario = { id: '', name: '', email: '', password: '', password_confirmation: '', juego_id: '' };
 
   gameStats = {
     player1: { moves: 0, pairs: 0, time: 0 },
@@ -45,6 +45,8 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
   juegoListObject?: any = [];
 
+  private readonly ID_JUEGO_FIJO: string = "95ad5c3b-d186-4d62-a5f6-3548186e6d5b";
+
   constructor(
     private juegosService: JuegosService,
     private partidaService: PartidaService,
@@ -53,16 +55,35 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.juegosService.getJuegos().subscribe(data => this.juegoListObject = data);
+    this.juegosService.getAllJuegos().subscribe(data => this.juegoListObject = data);
 
     const jugador1Data = localStorage.getItem('jugador1');
     const jugador2Data = localStorage.getItem('jugador2');
 
     if (jugador1Data && jugador2Data) {
-      this.jugador1 = JSON.parse(jugador1Data);
-      this.jugador2 = JSON.parse(jugador2Data);
+      const parsedJugador1 = JSON.parse(jugador1Data);
+      const parsedJugador2 = JSON.parse(jugador2Data);
+
+      this.jugador1 = {
+        id: parsedJugador1.id || '',
+        name: parsedJugador1.name || parsedJugador1.username || '',
+        email: parsedJugador1.email || '',
+        password: parsedJugador1.password || '',
+        password_confirmation: parsedJugador1.password_confirmation || parsedJugador1.password_confirm || '',
+        juego_id: parsedJugador1.juego_id || parsedJugador1.idjuego || this.ID_JUEGO_FIJO
+      };
+
+      this.jugador2 = {
+        id: parsedJugador2.id || '',
+        name: parsedJugador2.name || parsedJugador2.username || '',
+        email: parsedJugador2.email || '',
+        password: parsedJugador2.password || '',
+        password_confirmation: parsedJugador2.password_confirmation || parsedJugador2.password_confirm || '',
+        juego_id: parsedJugador2.juego_id || parsedJugador2.idjuego || this.ID_JUEGO_FIJO
+      };
+      console.log('Jugadores de localStorage cargados y adaptados en MemoryGame:', this.jugador1, this.jugador2);
     } else {
-      console.error('Jugadores no encontrados. Redirige al registro si es necesario.');
+      console.error('Jugadores no encontrados en localStorage. Redirige al registro si es necesario.');
     }
 
     this.resetGame();
@@ -98,8 +119,6 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
     clearInterval(this.timerInterval);
     this.startTimer();
-
-
   }
 
   shuffleCards(array: string[]): string[] {
@@ -165,10 +184,10 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     let ganador = 0;
     if (this.gameStats.player1.pairs > this.gameStats.player2.pairs) {
       this.winner = ganador = 1;
-      this.winnerText = `¡${this.jugador1.username} gana! 🎉`;
+      this.winnerText = `¡${this.jugador1.name} gana! 🎉`;
     } else if (this.gameStats.player2.pairs > this.gameStats.player1.pairs) {
       this.winner = ganador = 2;
-      this.winnerText = `¡${this.jugador2.username} gana! 🎉`;
+      this.winnerText = `¡${this.jugador2.name} gana! 🎉`;
     } else {
       this.winner = 0;
       this.winnerText = '¡Empate!';
@@ -176,62 +195,70 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
     clearInterval(this.timerInterval);
 
-    const partida: Partida = {
-      id: 0, // El backend lo genera
-      jugador1: this.jugador1.id,
-      jugador2: this.jugador2.id,
-      tiempo: this.formatTime(this.totalGameTime),
-      ganador: ganador,
-      juego: this.jugador1.idjuego, // Asumimos que ambos jugadores tienen el mismo juego
-      Aciertosjugador1: this.gameStats.player1.pairs,
-      Aciertosjugador2: this.gameStats.player2.pairs
+    const today = new Date();
+    const formattedDate = today.getFullYear() + '-' +
+                          String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                          String(today.getDate()).padStart(2, '0');
+
+    const partidaPayload: Omit<Partida, 'id'> = {
+      juego_id: this.ID_JUEGO_FIJO,
+      fecha: formattedDate,
+      tiempo: this.totalGameTime,
+      nivel: 'Facil'
     };
 
-    this.partidaService.GetCrearPartida(partida).subscribe({
+    console.log('Objeto partida a enviar (payload):', partidaPayload);
+
+    this.partidaService.createPartida(partidaPayload).subscribe({
       next: (res: any) => {
         console.log('✅ Partida guardada:', res);
 
-        const partidaId = res.id;
+        const partidaId = res.id; // Asumiendo que el ID de la partida sigue siendo numérico (number)
 
-        const aciertosJugador1 = {
-          partidaid: partidaId,
-          usuarioid: this.jugador1.id,
+        // CONSTRUCCIÓN DE LOS OBJETOS ACIERTOS: 'tiempo' ahora se incluye.
+        const aciertosJugador1Payload = {
+          partida_id: partidaId,
+          user_id: this.jugador1.id, // Asumimos que backend acepta UUID (string) aquí.
           aciertos: this.gameStats.player1.pairs,
-          tiempo: this.formatTime(this.gameStats.player1.time)
+          tiempo: this.formatTime(this.gameStats.player1.time) // <-- ¡CORREGIDO! 'tiempo' ahora se incluye
         };
 
-        const aciertosJugador2 = {
-          partidaid: partidaId,
-          usuarioid: this.jugador2.id,
+        const aciertosJugador2Payload = {
+          partida_id: partidaId,
+          user_id: this.jugador2.id, // Asumimos que backend acepta UUID (string) aquí.
           aciertos: this.gameStats.player2.pairs,
-          tiempo: this.formatTime(this.gameStats.player2.time)
+          tiempo: this.formatTime(this.gameStats.player2.time) // <-- ¡CORREGIDO! 'tiempo' ahora se incluye
         };
 
-        this.aciertosService.GetCrearAciertos(aciertosJugador1).subscribe({
+        console.log('Objeto aciertos Jugador 1 a enviar (payload):', aciertosJugador1Payload);
+        console.log('Objeto aciertos Jugador 2 a enviar (payload):', aciertosJugador2Payload);
+
+        this.aciertosService.createAcierto(aciertosJugador1Payload).subscribe({
           next: () => console.log('✅ Aciertos jugador 1 guardados'),
           error: err => console.error('❌ Error guardar aciertos jugador 1', err)
         });
 
-        this.aciertosService.GetCrearAciertos(aciertosJugador2).subscribe({
+        this.aciertosService.createAcierto(aciertosJugador2Payload).subscribe({
           next: () => console.log('✅ Aciertos jugador 2 guardados'),
           error: err => console.error('❌ Error guardar aciertos jugador 2', err)
         });
       },
-      error: (err) => console.error('❌ Error al guardar partida:', err)
+      error: (err) => {
+        console.error('❌ Error al guardar partida:', err);
+        if (err.error && err.error.message) {
+          console.error('Mensaje del servidor (partida):', err.error.message);
+        }
+        if (err.error && err.error.errors) {
+          console.error('Detalles de errores de validación (partida):', err.error.errors);
+        }
+      }
     });
   }
 
   startTimer() {
     this.timerInterval = setInterval(() => {
       if (this.showWinMessageFlag) return;
-
       this.totalGameTime++;
-
-      if (this.currentPlayer === 1) {
-        this.gameStats.player1.time++;
-      } else {
-        this.gameStats.player2.time++;
-      }
     }, 1000);
   }
 

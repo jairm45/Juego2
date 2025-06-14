@@ -1,25 +1,41 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Partida } from '../models/partida.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PartidaService {
+  private apiUrl = 'https://apigame.gonzaloandreslucio.com/api/partidas';
 
-  partidaURL = 'http://localhost:3000/partidas'
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  getPartidas(): Observable<any> {
-    return this.http.get(this.partidaURL);
+  // Cabeceras HTTP para las peticiones
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
   }
 
-  GetPartida(id: number): Observable<any> {
-    return this.http.get(`${this.partidaURL}/${id}`);
+  // Obtener todas las partidas
+  getPartidas(): Observable<Partida[]> {
+    return this.http.get<Partida[]>(this.apiUrl, {
+      headers: this.getHeaders(),
+    });
   }
 
-  GetCrearPartida(partida: any): Observable<any> {
-    return this.http.post(this.partidaURL, partida);
+  // Obtener una partida por ID
+  getPartidaById(id: number): Observable<Partida> {
+    return this.http.get<Partida>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Crear una nueva partida
+  createPartida(partida: Omit<Partida, 'id'>): Observable<Partida> {
+    return this.http.post<Partida>(this.apiUrl, partida, {
+      headers: this.getHeaders(),
+    });
   }
 }
