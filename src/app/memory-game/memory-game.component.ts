@@ -33,12 +33,12 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   jugador2: Usuario = { id: '', name: '', email: '', password: '', password_confirmation: '', juego_id: '' };
 
   gameStats = {
-    player1: { moves: 0, pairs: 0, time: 0 },
-    player2: { moves: 0, pairs: 0, time: 0 }
+    player1: { moves: 0, pairs: 0, time: 0 }, // 'time' ahora acumulará el tiempo individual
+    player2: { moves: 0, pairs: 0, time: 0 }  // 'time' ahora acumulará el tiempo individual
   };
 
   timerInterval: any;
-  totalGameTime: number = 0;
+  totalGameTime: number = 0; // Esta variable ahora solo para referencia, el tiempo individual está en gameStats
   showWinMessageFlag: boolean = false;
   winner: number | null = null;
   winnerText: string = '';
@@ -102,10 +102,10 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     this.winner = null;
     this.winnerText = '';
     this.currentPlayer = 1;
-    this.totalGameTime = 0;
+    this.totalGameTime = 0; // Se sigue reseteando, pero ya no es la fuente principal del tiempo de aciertos
 
-    this.gameStats.player1 = { moves: 0, pairs: 0, time: 0 };
-    this.gameStats.player2 = { moves: 0, pairs: 0, time: 0 };
+    this.gameStats.player1 = { moves: 0, pairs: 0, time: 0 }; // Resetea tiempo individual
+    this.gameStats.player2 = { moves: 0, pairs: 0, time: 0 }; // Resetea tiempo individual
 
     this.flippedCards = [];
 
@@ -171,6 +171,7 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   }
 
   switchPlayer() {
+    // Cuando se cambia de jugador, el timerInterval que está corriendo actualizará al nuevo jugador
     this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
   }
 
@@ -187,23 +188,24 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
       this.winnerText = `¡${this.jugador1.name} gana! 🎉`;
     } else if (this.gameStats.player2.pairs > this.gameStats.player1.pairs) {
       this.winner = ganador = 2;
-      this.winnerText = `¡${this.jugador2.name} gana! �`;
+      this.winnerText = `¡${this.jugador2.name} gana! 🎉`;
     } else {
       this.winner = 0;
       this.winnerText = '¡Empate!';
     }
 
-    clearInterval(this.timerInterval);
+    clearInterval(this.timerInterval); // Detiene el contador al finalizar el juego
 
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' +
                           String(today.getMonth() + 1).padStart(2, '0') + '-' +
                           String(today.getDate()).padStart(2, '0');
 
+    // La partida aún guarda el tiempo total, no el individual
     const partidaPayload: Omit<Partida, 'id'> = {
       juego_id: this.ID_JUEGO_FIJO,
       fecha: formattedDate,
-      tiempo: this.totalGameTime,
+      tiempo: this.totalGameTime, // Se mantiene el tiempo total de la partida para este payload
       nivel: 'Facil'
     };
 
@@ -213,21 +215,21 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         console.log('✅ Partida guardada:', res);
 
-        const partidaId = res.id; // Asumiendo que el ID de la partida sigue siendo numérico (number)
+        const partidaId = res.id;
 
-        // CONSTRUCCIÓN DE LOS OBJETOS ACIERTOS: user_id y tiempo como NÚMEROS
+        // CONSTRUCCIÓN DE LOS OBJETOS ACIERTOS: user_id y tiempo individual como NÚMEROS
         const aciertosJugador1Payload = {
           partida_id: partidaId,
-          user_id: Number(this.jugador1.id), // <--- ¡CAMBIO CLAVE! Convierte user_id a NUMBER
+          user_id: Number(this.jugador1.id),
           aciertos: this.gameStats.player1.pairs,
-          tiempo: this.gameStats.player1.time // Ya es NUMBER
+          tiempo: this.gameStats.player1.time // <-- ¡Ahora se envía el tiempo individual del jugador 1!
         };
 
         const aciertosJugador2Payload = {
           partida_id: partidaId,
-          user_id: Number(this.jugador2.id), // <--- ¡CAMBIO CLAVE! Convierte user_id a NUMBER
+          user_id: Number(this.jugador2.id),
           aciertos: this.gameStats.player2.pairs,
-          tiempo: this.gameStats.player2.time // Ya es NUMBER
+          tiempo: this.gameStats.player2.time // <-- ¡Ahora se envía el tiempo individual del jugador 2!
         };
 
         console.log('Objeto aciertos Jugador 1 a enviar (payload):', aciertosJugador1Payload);
@@ -256,9 +258,15 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   }
 
   startTimer() {
+    clearInterval(this.timerInterval); // Asegura que solo un intervalo esté corriendo
     this.timerInterval = setInterval(() => {
-      if (this.showWinMessageFlag) return;
-      this.totalGameTime++;
+      if (this.showWinMessageFlag) {
+        clearInterval(this.timerInterval); // Detiene el timer si el juego ha terminado
+        return;
+      }
+      const playerKey = `player${this.currentPlayer}` as 'player1' | 'player2';
+      this.gameStats[playerKey].time++; // Incrementa el tiempo del jugador actual
+      this.totalGameTime++; // También incrementa el tiempo total del juego (opcional, para la partida)
     }, 1000);
   }
 
