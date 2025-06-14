@@ -30,16 +30,16 @@ export class AciertosService {
   }
 
   /**
-   * Crea un nuevo registro de acierto, incluyendo el campo 'tiempo'.
+   * Crea un nuevo registro de acierto, asegurando que 'tiempo' y 'user_id' sean números.
    * @param acierto Objeto Aciertos (sin 'id') del frontend.
    * @returns Observable con la respuesta del backend.
    */
   createAcierto(acierto: Omit<Aciertos, 'id'>): Observable<Aciertos> {
     const backendPayload = {
       partida_id: acierto.partida_id,
-      user_id: acierto.user_id,
+      user_id: acierto.user_id,   // Ahora se espera que 'acierto.user_id' sea un número
       aciertos: acierto.aciertos,
-      tiempo: acierto.tiempo, // <--- ¡CORREGIDO! Incluir el campo 'tiempo'
+      tiempo: acierto.tiempo,     // Ahora se espera que 'acierto.tiempo' sea un número
     };
 
     console.log('Payload de Aciertos enviado:', backendPayload);

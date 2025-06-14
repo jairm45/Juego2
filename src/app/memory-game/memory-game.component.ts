@@ -187,7 +187,7 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
       this.winnerText = `¡${this.jugador1.name} gana! 🎉`;
     } else if (this.gameStats.player2.pairs > this.gameStats.player1.pairs) {
       this.winner = ganador = 2;
-      this.winnerText = `¡${this.jugador2.name} gana! 🎉`;
+      this.winnerText = `¡${this.jugador2.name} gana! �`;
     } else {
       this.winner = 0;
       this.winnerText = '¡Empate!';
@@ -215,19 +215,19 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
         const partidaId = res.id; // Asumiendo que el ID de la partida sigue siendo numérico (number)
 
-        // CONSTRUCCIÓN DE LOS OBJETOS ACIERTOS: 'tiempo' ahora se incluye.
+        // CONSTRUCCIÓN DE LOS OBJETOS ACIERTOS: user_id y tiempo como NÚMEROS
         const aciertosJugador1Payload = {
           partida_id: partidaId,
-          user_id: this.jugador1.id, // Asumimos que backend acepta UUID (string) aquí.
+          user_id: Number(this.jugador1.id), // <--- ¡CAMBIO CLAVE! Convierte user_id a NUMBER
           aciertos: this.gameStats.player1.pairs,
-          tiempo: this.formatTime(this.gameStats.player1.time) // <-- ¡CORREGIDO! 'tiempo' ahora se incluye
+          tiempo: this.gameStats.player1.time // Ya es NUMBER
         };
 
         const aciertosJugador2Payload = {
           partida_id: partidaId,
-          user_id: this.jugador2.id, // Asumimos que backend acepta UUID (string) aquí.
+          user_id: Number(this.jugador2.id), // <--- ¡CAMBIO CLAVE! Convierte user_id a NUMBER
           aciertos: this.gameStats.player2.pairs,
-          tiempo: this.formatTime(this.gameStats.player2.time) // <-- ¡CORREGIDO! 'tiempo' ahora se incluye
+          tiempo: this.gameStats.player2.time // Ya es NUMBER
         };
 
         console.log('Objeto aciertos Jugador 1 a enviar (payload):', aciertosJugador1Payload);

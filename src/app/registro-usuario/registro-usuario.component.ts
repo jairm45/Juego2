@@ -13,16 +13,17 @@ import { UsuariosService } from '../services/usuarios.service';
   styleUrls: ['./registro-usuario.component.css']
 })
 export class RegistroUsuarioComponent implements OnInit {
-  // Eliminada la constante 'juego_id' como string, ya que la API espera un número entero (juego_id: number)
+  // Definir el ID del juego fijo aquí para asegurar su uso
+  private readonly ID_JUEGO_FIJO: string = "95ad5c3b-d186-4d62-a5f6-3548186e6d5b";
 
-  // ACTUALIZADO: Inicialización con la estructura de Usuario corregida
+  // Inicialización del usuario con el juego_id fijo
   usuario: Usuario = {
-    id: '', // El ID se generará al registrar si el backend lo permite, o se usará crypto.randomUUID()
-    name: '', // CAMBIADO: Antes 'username'
+    id: '', // Se generará un nuevo UUID al registrar
+    name: '',
     email: '',
     password: '',
-    password_confirmation: '', // CAMBIADO: Antes 'password_confirm'
-    juego_id: '' // CAMBIADO CRÍTICO: Debe ser un número entero. Asigna un ID de juego válido si es conocido.
+    password_confirmation: '',
+    juego_id: this.ID_JUEGO_FIJO // <-- Asignado el ID de juego fijo aquí
   };
 
   constructor(
@@ -35,56 +36,54 @@ export class RegistroUsuarioComponent implements OnInit {
   /**
    * Maneja el registro de un nuevo usuario.
    * Valida los campos y envía los datos al backend.
-   * Reemplaza 'alert()' con 'console.error' o lógica de UI de mensaje.
    */
   registrarUsuario(): void {
-    // ACTUALIZADO: Desestructuración de los campos del usuario con los nombres correctos
     const { name, email, password, password_confirmation } = this.usuario;
 
     if (name && email && password && password_confirmation) {
       if (password !== password_confirmation) {
-        console.error('Las contraseñas no coinciden'); // Reemplazado alert()
-        // Aquí podrías actualizar una propiedad para mostrar un mensaje de error en el HTML
+        console.error('Las contraseñas no coinciden');
+        // Implementar lógica de UI para mostrar el error al usuario
         return;
       }
 
-      // Prepara el objeto para enviar al servicio.
-      // El ID no se incluye en el POST si el backend lo genera (según tu OpenAPI).
-      // Los nombres de los campos coinciden con la OpenAPI.
+      // Prepara el objeto para enviar al servicio, asegurando el juego_id fijo.
       const nuevoUsuarioParaBackend: Omit<Usuario, 'id'> = {
         name: this.usuario.name,
         email: this.usuario.email,
         password: this.usuario.password,
         password_confirmation: this.usuario.password_confirmation,
-        juego_id: this.usuario.juego_id // Asegúrate de que este sea un número entero válido (Ej: 1, 2, 3...)
+        juego_id: this.ID_JUEGO_FIJO // <-- Asegurando que el juego_id sea el fijo al enviar
       };
 
       this.usuariosService.crearUsuario(nuevoUsuarioParaBackend).subscribe({
         next: (res) => {
           console.log('Usuario registrado:', res);
-          console.log('¡Usuario registrado con éxito!'); // Reemplazado alert()
-          // Aquí podrías mostrar un mensaje de éxito al usuario en el HTML
+          console.log('¡Usuario registrado con éxito!');
 
-          // Reinicia el formulario a su estado inicial
+          // Reinicia el formulario
           this.usuario = {
             id: '',
             name: '',
             email: '',
             password: '',
             password_confirmation: '',
-            juego_id: '' // Restablece a 0 o al valor predeterminado del juego
+            juego_id: this.ID_JUEGO_FIJO // Se mantiene el ID fijo para nuevas entradas
           };
-          this.router.navigate(['/']); // Redirige después de un registro exitoso
+          this.router.navigate(['/']);
         },
         error: (err) => {
           console.error('Error al registrar usuario:', err);
-          console.error('Ocurrió un error al registrar el usuario. Por favor, intente de nuevo.'); // Reemplazado alert()
-          // Aquí podrías mostrar un mensaje de error detallado al usuario en el HTML
+          if (err.error && err.error.message) {
+            console.error('Mensaje del servidor:', err.error.message);
+          }
+          if (err.error && err.error.errors) {
+            console.error('Detalles de errores de validación:', err.error.errors);
+          }
         }
       });
     } else {
-      console.error('Por favor completa todos los campos.'); // Reemplazado alert()
-      // Aquí podrías mostrar un mensaje de error al usuario sobre campos faltantes
+      console.error('Por favor completa todos los campos.');
     }
   }
 }
